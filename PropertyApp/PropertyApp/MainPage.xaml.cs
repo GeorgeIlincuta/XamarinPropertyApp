@@ -40,6 +40,36 @@ namespace PropertyApp
                 new Property { Image = "apt3.png", Address = "2112 Anthony Way, LA", Location = "Califonia", Price = "$900/mo", Bed = "2 Bed", Bath = "2 Bath", Space = "1200 sqft", Details = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Bibendum est ultricies integer quis. Iaculis urna id volutpat lacus laoreet. Mauris vitae ultricies leo integer malesuada. Ac odio tempor orci dapibus ultrices in. Egestas diam in arcu cursus euismod. Dictum fusce ut" },
             };
         }
+
+        private async void PropertySelected(object sender, EventArgs e)
+        {
+            var property = (sender as View).BindingContext as Property;
+            await this.Navigation.PushAsync(new DetailsPage(property));
+        }
+
+        private void SelectType(object sender, EventArgs e)
+        {
+            var view = sender as View;
+            var parent = view.Parent as StackLayout;
+
+            foreach (var child in parent.Children)
+            {
+                VisualStateManager.GoToState(child, "Normal");
+                ChangeTextColor(child, "#707070");
+            }
+
+            VisualStateManager.GoToState(view, "Selected");
+            ChangeTextColor(view, "#FFFFFF");
+        }
+
+        private void ChangeTextColor(View child, string hexColor)
+        {
+            var txtCtrl = child.FindByName<Label>("PropertyTypeName");
+            if (txtCtrl != null)
+            {
+                txtCtrl.TextColor = Color.FromHex(hexColor);
+            }
+        }
     }
 
     public class PropertyType
